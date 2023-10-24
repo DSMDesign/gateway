@@ -17,11 +17,16 @@ class GocardlessController extends Controller
 {
     public function __construct()
     {
-        if (config('gateway.gc_live')) {
+        $token = config('gateway.gc_access_token');
+        if (empty($token)) return;
+
+        $isLive = config('gateway.gc_live');
+
+        if ($isLive) {
             $this->goCardless = new \GoCardlessPro\Client([
                 // We recommend storing your access token in an
                 // environment variable for security
-                'access_token' => config('gateway.gc_access_token'),
+                'access_token' => $token,
                 // Change me to LIVE when you're ready to go live
                 'environment' => \GoCardlessPro\Environment::LIVE
             ]);
@@ -29,7 +34,7 @@ class GocardlessController extends Controller
             $this->goCardless = new \GoCardlessPro\Client([
                 // We recommend storing your access token in an
                 // environment variable for security
-                'access_token' => config('gateway.gc_access_token'),
+                'access_token' => $token,
                 // Change me to LIVE when you're ready to go live
                 'environment' => \GoCardlessPro\Environment::SANDBOX
             ]);

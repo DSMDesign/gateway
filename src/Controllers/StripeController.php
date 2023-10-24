@@ -20,8 +20,11 @@ class StripeController extends Controller
 {
     public function __construct()
     {
+        $secret = config('gateway.stripe_secret');
         // Start the string with the api key
-        $this->stripe = new StripeClient(config('gateway.stripe_secret'));
+        if ($secret) {
+            $this->stripe = new StripeClient($secret);
+        }
     }
 
     /**
